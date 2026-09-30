@@ -33,6 +33,8 @@ public class ProxyConfig {
     private String mode;
     @Value("${osm.precache.queue.size}")
     private int osmPrecacheQueueSize;
+    @Value("${osm.tiles.dir}")
+    private String osmTilesDirectory;
 
     public static final String MODE_PROXY = "proxy";  // only pass through to OSM server, no not cache
     public static final String MODE_PROXYCACHE = "proxycache";  // get and cache
@@ -61,5 +63,11 @@ public class ProxyConfig {
     }
     public void setOsmPrecacheQueueSize(int osmPrecacheQueueSize) {
         this.osmPrecacheQueueSize = osmPrecacheQueueSize;
+    }
+    public String getOsmTilesDirectory() {
+        return osmTilesDirectory;
+    }
+    public void setOsmTilesDirectory(String osmTilesDirectory) {
+        this.osmTilesDirectory = osmTilesDirectory;
     }
 }

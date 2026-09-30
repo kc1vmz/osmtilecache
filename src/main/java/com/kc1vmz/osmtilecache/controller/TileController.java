@@ -34,9 +34,11 @@ import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
+import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Inject;
 
 @Controller("/api/v1/tiles") 
+@Transactional(readOnly = false) 
 @Secured(SecurityRule.IS_ANONYMOUS) 
 public class TileController {
 

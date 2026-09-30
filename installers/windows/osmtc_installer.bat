@@ -20,7 +20,7 @@ rem
 
 setlocal enabledelayedexpansion
 
-echo Welcome to the APRS Welcome Center installer for Microsoft Windows.
+echo Welcome to the OSM Tile Cache installer for Microsoft Windows.
 echo Copyright (c) 2026 John Rokicki KC1VMZ - Licensed under GPL v3
 echo https://www.kc1vmz.com
 echo.
@@ -29,20 +29,25 @@ echo Please install these pre-requisites prior to installation.
 echo Java can be found at https://www.java.com/en/download/manual.jsp
 echo.
 pause
-SET WC_INSTALL_DIR=%USERPROFILE%\APRSWelcomeCenter
-SET WC_TEMP_DIR=%TEMP%\APRSWelcomeCenter
-SET WC_DB_DIR=%WC_TEMP_DIR%\db
-SET WC_VERSION=1.0.8
-SET WC_PORT=8080
+SET OSMTC_INSTALL_DIR=%USERPROFILE%\OSMTileCache
+SET OSMTC_TEMP_DIR=%TEMP%\OSMTileCache
+SET OSMTC_DB_DIR=%OSMTC_TEMP_DIR%\db
+SET OSMTC_TILES_DIR=%OSMTC_TEMP_DIR%\tiles
+SET OSMTC_VERSION=1.0.0
+SET OSMTC_PORT=8888
+SET OSMTC_TILE_SERVER=tile.openstreetmap.org
 
 REM Prompt the user for input
-SET /P "WC_VERSION=What version of APRS Welcome Center? (Default: %WC_VERSION%): "
-SET /P "WC_INSTALL_DIR=Where should APRS Welcome Center be installed? (Default: %WC_INSTALL_DIR%): "
-SET /P "WC_TEMP_DIR=Where should APRS Welcome Center database space be located? (Default: %WC_DB_DIR%): "
-SET /P "WC_TEMP_DIR=Where should APRS Welcome Center temp space be located? (Default: %WC_TEMP_DIR%): "
-SET /P "WC_PORT=What port should the HTTP service listen on? (Default: %WC_PORT%): "
+SET /P "OSMTC_VERSION=What version of OSM Tile Cache? (Default: %OSMTC_VERSION%): "
+SET /P "OSMTC_INSTALL_DIR=Where should OSM Tile Cache be installed? (Default: %OSMTC_INSTALL_DIR%): "
+SET /P "OSMTC_DB_DIR=Where should OSM Tile Cache database space be located? (Default: %OSMTC_DB_DIR%): "
+SET /P "OSMTC_TEMP_DIR=Where should OSM Tile Cache temp space be located? (Default: %OSMTC_TEMP_DIR%): "
+SET /P "OSMTC_TILES_DIR=Where should OSM Tile Cache tile space be located? (Default: %OSMTC_TILES_DIR%): "
+SET /P "OSMTC_PORT=What port should the HTTP service listen on? (Default: %OSMTC_PORT%): "
+SET /P "OSMTC_CONFIG=What operation mode (proxy, cache, proxycache - default: %OSMTC_CONFIG%): "
+SET /P "OSMTC_TILE_SERVER=Tile server address (Default: %OSMTC_TILE_SERVER%): "
 
-SET APRSWC_TEMP_DIR=%WC_TEMP_DIR%
+
 pushd .
 
 echo Checking for pre-requisite - Java 21
@@ -78,42 +83,50 @@ if !major_version! lss 21 (
 echo Starting installation
 
 echo Creating directories
-mkdir %WC_INSTALL_DIR%
-mkdir %WC_TEMP_DIR%
+mkdir %OSMTC_INSTALL_DIR%
+mkdir %OSMTC_TEMP_DIR%
+mkdir %OSMTC_DB_DIR%
+mkdir %OSMTC_TILES_DIR%
 
-cd %WC_INSTALL_DIR%
+cd %OSMTC_INSTALL_DIR%
 
-echo Downloading built components for version %WC_VERSION% from Github
-SET WC_SRC_URL_ROOT=https://github.com/kc1vmz/aprswelcomecenter/releases/download/v%WC_VERSION%
-curl -L -o aprs-welcome-center-%WC_VERSION%.jar %WC_SRC_URL_ROOT%\aprs-welcome-center-%WC_VERSION%.jar
-SET WC_SRC_URL_ROOT=
+echo Downloading built components for version %OSMTC_VERSION% from Github
+SET OSMTC_SRC_URL_ROOT=https://github.com/kc1vmz/osmtilecache/releases/download/v%OSMTC_VERSION%
+curl -L -o osmtilecache-%OSMTC_VERSION%.jar %OSMTC_SRC_URL_ROOT%\osmtilecache-%OSMTC_VERSION%.jar
+SET OSMTC_SRC_URL_ROOT=
 
 echo Creating startup script
-echo @ECHO OFF>> aprswc_start.bat
-echo pushd .>> aprswc_start.bat
-echo cd %WC_INSTALL_DIR%>> aprswc_start.bat
-echo REM Set Environment Variables>> aprswc_start.bat
-echo SET APRSWC_DB_DIR=%APRSWC_DB_DIR%>> aprswc_start.bat
-echo SET APRSWC_TEMP_DIR=%APRSWC_TEMP_DIR%>> aprswc_start.bat
-echo SET SERVER_PORT=%APRSWC_PORT%>> aprswc_start.bat
-echo SET APRSWC_INSTALL_DIR=%APRSWC_INSTALL_DIR%>> aprswc_start.bat
-echo REM Start Processes>> aprswc_start.bat
-echo start java -jar aprs-welcome-center-%WC_VERSION%.jar>> aprswc_start.bat
-echo echo APRS Welcome Center started>> aprswc_start.bat
-echo popd>> aprswc_start.bat
+echo @ECHO OFF>> osmtc_start.bat
+echo pushd .>> osmtc_start.bat
+echo cd %OSMTC_INSTALL_DIR%>> osmtc_start.bat
+echo REM Set Environment Variables>> osmtc_start.bat
+echo SET OSMTC_DB_DIR=%OSMTC_DB_DIR%>> osmtc_start.bat
+echo SET OSMTC_TEMP_DIR=%OSMTC_TEMP_DIR%>> osmtc_start.bat
+echo SET OSMTC_TILES_DIR=%OSMTC_TILES_DIR%>> osmtc_start.bat
+echo SET SERVER_PORT=%OSMTC_PORT%>> osmtc_start.bat
+echo SET OSMTC_INSTALL_DIR=%OSMTC_INSTALL_DIR%>> osmtc_start.bat
+echo SET OSMTC_CONFIG=%OSMTC_CONFIG%>> osmtc_start.bat
+echo SET OSMTC_TILE_SERVER=%OSMTC_TILE_SERVER%>> osmtc_start.bat
+echo REM Start Processes>> osmtc_start.bat
+echo start java -jar osmtilecache-%OSMTC_VERSION%.jar>> osmtc_start.bat
+echo echo OSM Tile Cache started>> osmtc_start.bat
+echo popd>> osmtc_start.bat
 
 echo Finishing up
 popd
 
-SET WC_INSTALL_DIR=
-SET WC_TEMP_DIR=
-SET WC_VERSION=
-SET WC_TEMP_DIR=
+SET OSMTC_INSTALL_DIR=
+SET OSMTC_TEMP_DIR=
+SET OSMTC_VERSION=
+SET OSMTC_TEMP_DIR=
+SET OSMTC_TILES_DIR=
+SET OSMTC_CONFIG=
+SET OSMTC_TILE_SERVER=
 
 echo.
 echo Installation complete.
 echo.
-echo Run 'aprswc_start.bat' to start APRS Welcome Center.
+echo Run 'osmtc_start.bat' to start OSM Tile Cache.
 exit /b 0
 
 :done

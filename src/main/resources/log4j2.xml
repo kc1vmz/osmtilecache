@@ -5,8 +5,8 @@
 	</Properties>
 	<Appenders>
 		<RollingFile name="fileLogger"
-			fileName="${env:OSMTC_TEMP_DIR:-/tmp}/logs/${logFilePrefix}.log"
-			filePattern="${env:OSMTC_TEMP_DIR:-/tmp}/logs/${logFilePrefix}-%d{yyyy-MM-dd}.log">
+			fileName="${env:OSMTC_TEMP_DIR:-.}/logs/${logFilePrefix}.log"
+			filePattern="${env:OSMTC_TEMP_DIR:-.}/logs/${logFilePrefix}-%d{yyyy-MM-dd}.log">
 			<PatternLayout>
 				<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
 				</pattern>
@@ -17,7 +17,7 @@
 			</Policies>
 			<!-- Max 10 files will be created everyday -->
 			<DefaultRolloverStrategy max="10">
-				<Delete basePath="${env:OSMTC_TEMP_DIR:-/tmp}/logs" maxDepth="10">
+				<Delete basePath="${env:OSMTC_TEMP_DIR:-.}/logs" maxDepth="10">
 					<!-- Delete all files older than 10 days -->
 					<IfLastModified age="10d" />
 				</Delete>
@@ -25,7 +25,7 @@
 		</RollingFile>
 	</Appenders>
     <Loggers>
-        <Logger name="com./kc1vmz.osmtilecache" level="info" additivity="false">
+        <Logger name="com.kc1vmz.osmtilecache" level="info" additivity="false">
             <AppenderRef ref="fileLogger"/>
         </Logger>
         <Logger name="io.micronaut" level="info" additivity="false">

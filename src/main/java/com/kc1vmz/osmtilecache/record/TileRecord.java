@@ -20,13 +20,11 @@ package com.kc1vmz.osmtilecache.record;
     http://www.kc1vmz.com
 */
 
-import java.time.ZonedDateTime;
-
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 import jakarta.validation.constraints.NotBlank;
 
 @MappedEntity("tile")
-public record TileRecord(@Id @NonNull @NotBlank String tile_key, @NonNull @NotBlank Integer x, @NonNull @NotBlank Integer y, @NonNull @NotBlank Integer z, @NonNull @NotBlank ZonedDateTime fetch_time, @NonNull @NotBlank String filename) {  
+public record TileRecord(@Id @NonNull @NotBlank String tile_key, @NonNull @NotBlank Integer x, @NonNull @NotBlank Integer y, @NonNull @NotBlank Integer z, @NonNull @NotBlank String fetch_time, @NonNull @NotBlank String filename) {  
 }

@@ -41,6 +41,8 @@ public class TileDatabaseAccessor {
     private ProxyConfig proxyConfig;
     @Inject
     private TileRepository tileRepository;
+    @Inject 
+    private TileFileAccessor tileFileAccessor;
 
     private String generateTileKey(String x, String y, String z) {
         return String.format("%s-%s-%s", x, y, z);
@@ -56,7 +58,8 @@ public class TileDatabaseAccessor {
         }
         TileRecord record = recordOpt.get();
         ZonedDateTime expirationTime = now.minusDays(proxyConfig.getOsmRefreshTileDays());
-        if (record.fetch_time().isBefore(expirationTime)) {
+        ZonedDateTime fetchTime = ZonedDateTime.parse(record.fetch_time());
+        if (fetchTime.isBefore(expirationTime)) {
             // it is old - purge this now
             tileRepository.delete(record);
             logger.info("Purging aged tile key "+tileKey);
@@ -64,7 +67,7 @@ public class TileDatabaseAccessor {
         }
 
         // return valid data
-        return getTileFile(record.filename());
+        return tileFileAccessor.getTileFile(record.filename());
     }
 
     public void save(String x, String y, String z, ZonedDateTime now, byte[] fileContent) {
@@ -72,8 +75,8 @@ public class TileDatabaseAccessor {
         Integer yn = Integer.parseInt(y);
         Integer zn = Integer.parseInt(z);
         String tileKey = generateTileKey(x, y, z);
-        String filename = createTileFile(fileContent);
-        TileRecord record = new TileRecord(tileKey, xn, yn, zn, now, filename);
+        String filename = tileFileAccessor.createTileFile(tileKey, fileContent);
+        TileRecord record = new TileRecord(tileKey, xn, yn, zn, now.toString(), filename);
 
         try {
             TileRecord saved = tileRepository.save(record);
@@ -83,14 +86,6 @@ public class TileDatabaseAccessor {
         } catch (Exception e) {
             logger.error(String.format("Exception caught writing tile key %s", tileKey), e);
         }
-    }
-
-    private String createTileFile(byte[] fileContent) {
-        return "test";
-    }
-
-    private byte[] getTileFile(String filename) {
-        return null;
     }
 
     public Statistics getStatistics() {

@@ -21,6 +21,10 @@ if [ "$OSMTC_OS" = "Linux" ]; then
 
   echo Removing environment variables from /etc/environment
   sudo sed -i '/OSMTC_INSTALL_DIR/d' /etc/environment
+  sudo sed -i '/OSMTC_DB_DIR/d' /etc/environment
+  sudo sed -i '/OSMTC_TILES_DIR/d' /etc/environment
+  sudo sed -i '/OSMTC_CONFIG/d' /etc/environment
+  sudo sed -i '/OSMTC_TILE_SERVER/d' /etc/environment
 
   echo Removing services
   sudo systemctl stop osmtilecache
@@ -40,6 +44,18 @@ if [ "$OSMTC_OS" = "Linux" ]; then
     echo Not deleting ${OSMTC_TEMP_DIR} - delete independently.
   else
     echo OSM Tile Cache temporary directory unknown - delete independently.
+  fi
+
+  if [ -n "${OSMTC_DB_DIR+x}" ]; then
+    echo Not deleting ${OSMTC_DB_DIR} - delete independently.
+  else
+    echo OSM Tile Cache database directory unknown - delete independently.
+  fi
+
+  if [ -n "${OSMTC_TILES_DIR+x}" ]; then
+    echo Not deleting ${OSMTC_TILES_DIR} - delete independently.
+  else
+    echo OSM Tile Cache tiles directory unknown - delete independently.
   fi
 
   OSMTC_CONFIRM_UNINSTALL=

@@ -35,12 +35,15 @@ if [ "$OSMTC_OS" = "Linux" ]; then
   fi
 
   # default environment variables
-  OSMTC_VERSION=0.0.1
+  OSMTC_VERSION=1.0.0
   OSMTC_INSTALL_DIR=~/osmtc
   OSMTC_DB_DIR=~/osmtc/db
   OSMTC_TEMP_DIR=~/osmtc/tmp
-  OSMTC_PORT=8080
+  OSMTC_TILES_DIR=~/osmtc/tiles
+  OSMTC_PORT=8888
   OSMTC_INSTALL_SERVICES=Y
+  OSMTC_CONFIG=proxycache
+  OSMTC_TILE_SERVER=tile.openstreetmap.org
 
   if [[ "$OSMTC_INSTALL_SERVICES" =~ ^[Yy]$ ]]; then
     read -e -i $OSMTC_VERSION -p "What version of OSM Tile Cache?: " OSMTC_VERSION
@@ -48,7 +51,10 @@ if [ "$OSMTC_OS" = "Linux" ]; then
       read -e -i $OSMTC_INSTALL_DIR -p "Where should OSM Tile Cache be installed?: " OSMTC_INSTALL_DIR
       read -e -i $OSMTC_DB_DIR -p "Where should OSM Tile Cache database space be located?: " OSMTC_DB_DIR
       read -e -i $OSMTC_TEMP_DIR -p "Where should OSM Tile Cache temp space be located?: " OSMTC_TEMP_DIR
+      read -e -i $OSMTC_TILES_DIR -p "Where should OSM Tile Cache tile space be located?: " OSMTC_TILES_DIR
       read -e -i $OSMTC_PORT -p "What port should the HTTP service listen on?: " OSMTC_PORT
+      read -e -i $OSMTC_CONFIG -p "What operation mode (proxy, cache, proxycache)?: " OSMTC_CONFIG
+      read -e -i $OSMTC_TILE_SERVER -p "Tile server address?: " OSMTC_TILE_SERVER
       read -e -i $OSMTC_INSTALL_SERVICES -p "Do you want OSM Tile Cache to be configured as services and started at boot time (Y/n)?: " OSMTC_INSTALL_SERVICES
     else
       OSMTC_INSTALL_DIR=$(grep "^OSMTC_INSTALL_DIR=" /etc/environment | sed 's/^OSMTC_INSTALL_DIR=//' | tr -d '"')
@@ -71,11 +77,18 @@ if [ "$OSMTC_OS" = "Linux" ]; then
   OSMTC_INSTALL_DIR=$OSMTC_INSTALL_DIR
   if [[ "$OSMTC_UPGRADE" =~ ^[Nn]$ ]]; then
     echo "OSMTC_INSTALL_DIR=$OSMTC_INSTALL_DIR" | sudo tee -a /etc/environment >  /dev/null
+    echo "OSMTC_DB_DIR=$OSMTC_DB_DIR" | sudo tee -a /etc/environment >  /dev/null
+    echo "OSMTC_TILES_DIR=$OSMTC_TILES_DIR" | sudo tee -a /etc/environment >  /dev/null
+    echo "OSMTC_CONFIG=$OSMTC_CONFIG" | sudo tee -a /etc/environment >  /dev/null
+    echo "OSMTC_TILE_SERVER=$OSMTC_TILE_SERVER" | sudo tee -a /etc/environment >  /dev/null
+
     mkdir $OSMTC_INSTALL_DIR
     sudo mkdir $OSMTC_TEMP_DIR
     sudo chown $USER $OSMTC_TEMP_DIR
     sudo mkdir $OSMTC_DB_DIR
     sudo chown $USER $OSMTC_DB_DIR
+    sudo mkdir $OSMTC_TILES_DIR
+    sudo chown $USER $OSMTC_TILES_DIR
   fi
 
   echo "Retrieving OSM Tile Cache binary"
@@ -89,6 +102,7 @@ if [ "$OSMTC_OS" = "Linux" ]; then
   if [[ "$OSMTC_UPGRADE" =~ ^[Nn]$ ]]; then
     OSMTC_DB_DIR=$OSMTC_DB_DIR
     OSMTC_TEMP_DIR=$OSMTC_TEMP_DIR
+    OSMTC_TILES_DIR=$OSMTC_TILES_DIR
     OSMTC_PORT=$OSMTC_PORT
   else
     if [ -n "/etc/systemd/system/osmtilecache.service+x" ]; then
@@ -112,8 +126,11 @@ if [ "$OSMTC_OS" = "Linux" ]; then
       echo 'ExecStart=java -jar '$OSMTC_INSTALL_DIR'/osmtilecache-'$OSMTC_VERSION'.jar' | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
       echo 'Environment=OSMTC_DB_DIR='$OSMTC_DB_DIR | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
       echo 'Environment=OSMTC_TEMP_DIR='$OSMTC_TEMP_DIR | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
+      echo 'Environment=OSMTC_TILES_DIR='$OSMTC_TILES_DIR | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
       echo 'Environment=SERVER_PORT='$OSMTC_PORT | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
       echo 'Environment=OSMTC_INSTALL_DIR='$OSMTC_INSTALL_DIR | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
+      echo 'Environment=OSMTC_CONFIG='$OSMTC_CONFIG | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
+      echo 'Environment=OSMTC_TILE_SERVER='$OSMTC_TILE_SERVER | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
       echo '[Install]' | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
       echo 'WantedBy=multi-user.target' | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
       sudo systemctl daemon-reload
@@ -133,12 +150,8 @@ if [ "$OSMTC_OS" = "Linux" ]; then
   fi
 
   # cleanup environment
-  OSMTC_INSTALL_DIR=
-  OSMTC_TEMP_DIR=
   OSMTC_VERSION=
   OSMTC_INSTALL_SERVICES=
-  OSMTC_DB_DIR=
-  OSMTC_PORT=
   OSMTC_UPGRADE=
 elif [ "$OSMTC_OS" = "Darwin" ]; then
   echo "This is a Mac Machine - not yet supported"
