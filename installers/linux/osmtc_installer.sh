@@ -81,6 +81,7 @@ if [ "$OSMTC_OS" = "Linux" ]; then
     echo "OSMTC_TILES_DIR=$OSMTC_TILES_DIR" | sudo tee -a /etc/environment >  /dev/null
     echo "OSMTC_CONFIG=$OSMTC_CONFIG" | sudo tee -a /etc/environment >  /dev/null
     echo "OSMTC_TILE_SERVER=$OSMTC_TILE_SERVER" | sudo tee -a /etc/environment >  /dev/null
+    echo "OSMTC_HTTP_PORT=$OSMTC_PORT" | sudo tee -a /etc/environment >  /dev/null
 
     mkdir $OSMTC_INSTALL_DIR
     sudo mkdir $OSMTC_TEMP_DIR
@@ -103,7 +104,7 @@ if [ "$OSMTC_OS" = "Linux" ]; then
     OSMTC_DB_DIR=$OSMTC_DB_DIR
     OSMTC_TEMP_DIR=$OSMTC_TEMP_DIR
     OSMTC_TILES_DIR=$OSMTC_TILES_DIR
-    OSMTC_PORT=$OSMTC_PORT
+    OSMTC_HTTP_PORT=$OSMTC_PORT
   else
     if [ -n "/etc/systemd/system/osmtilecache.service+x" ]; then
       OSMTC_INSTALL_SERVICES=Y
@@ -127,7 +128,7 @@ if [ "$OSMTC_OS" = "Linux" ]; then
       echo 'Environment=OSMTC_DB_DIR='$OSMTC_DB_DIR | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
       echo 'Environment=OSMTC_TEMP_DIR='$OSMTC_TEMP_DIR | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
       echo 'Environment=OSMTC_TILES_DIR='$OSMTC_TILES_DIR | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
-      echo 'Environment=SERVER_PORT='$OSMTC_PORT | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
+      echo 'Environment=OSMTC_HTTP_PORT='$OSMTC_PORT | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
       echo 'Environment=OSMTC_INSTALL_DIR='$OSMTC_INSTALL_DIR | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
       echo 'Environment=OSMTC_CONFIG='$OSMTC_CONFIG | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null
       echo 'Environment=OSMTC_TILE_SERVER='$OSMTC_TILE_SERVER | sudo tee -a /etc/systemd/system/osmtilecache.service >  /dev/null

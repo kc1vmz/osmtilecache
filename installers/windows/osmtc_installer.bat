@@ -103,7 +103,7 @@ echo REM Set Environment Variables>> osmtc_start.bat
 echo SET OSMTC_DB_DIR=%OSMTC_DB_DIR%>> osmtc_start.bat
 echo SET OSMTC_TEMP_DIR=%OSMTC_TEMP_DIR%>> osmtc_start.bat
 echo SET OSMTC_TILES_DIR=%OSMTC_TILES_DIR%>> osmtc_start.bat
-echo SET SERVER_PORT=%OSMTC_PORT%>> osmtc_start.bat
+echo SET OSMTC_HTTP_PORT=%OSMTC_PORT%>> osmtc_start.bat
 echo SET OSMTC_INSTALL_DIR=%OSMTC_INSTALL_DIR%>> osmtc_start.bat
 echo SET OSMTC_CONFIG=%OSMTC_CONFIG%>> osmtc_start.bat
 echo SET OSMTC_TILE_SERVER=%OSMTC_TILE_SERVER%>> osmtc_start.bat

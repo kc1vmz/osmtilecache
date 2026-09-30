@@ -25,6 +25,7 @@ if [ "$OSMTC_OS" = "Linux" ]; then
   sudo sed -i '/OSMTC_TILES_DIR/d' /etc/environment
   sudo sed -i '/OSMTC_CONFIG/d' /etc/environment
   sudo sed -i '/OSMTC_TILE_SERVER/d' /etc/environment
+  sudo sed -i '/OSMTC_HTTP_PORT/d' /etc/environment
 
   echo Removing services
   sudo systemctl stop osmtilecache
