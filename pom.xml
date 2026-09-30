@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.kc1vmz</groupId>
 	<artifactId>osmtilecache</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>OSM Tile Cache</name>
@@ -30,7 +30,7 @@
 		<release.version>21</release.version>
 		<maven.compiler.target>21</maven.compiler.target>
 		<maven.compiler.source>21</maven.compiler.source>
-    <osmtilecache.version>1.0.0</osmtilecache.version>
+    <osmtilecache.version>1.0.1</osmtilecache.version>
   </properties>
 
   <dependencies>

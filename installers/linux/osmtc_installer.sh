@@ -35,7 +35,7 @@ if [ "$OSMTC_OS" = "Linux" ]; then
   fi
 
   # default environment variables
-  OSMTC_VERSION=1.0.0
+  OSMTC_VERSION=1.0.1
   OSMTC_INSTALL_DIR=~/osmtc
   OSMTC_DB_DIR=~/osmtc/db
   OSMTC_TEMP_DIR=~/osmtc/tmp
