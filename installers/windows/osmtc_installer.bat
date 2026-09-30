@@ -32,7 +32,7 @@ pause
 SET OSMTC_INSTALL_DIR=%USERPROFILE%\OSMTileCache
 SET OSMTC_TEMP_DIR=%TEMP%\OSMTileCache
 SET OSMTC_DB_DIR=%OSMTC_TEMP_DIR%\db
-SET OSMTC_TILES_DIR=%OSMTC_TEMP_DIR%\tiles
+SET OSMTC_TILES_DIR=%OSMTC_TEMP_DIR%\tiles\
 SET OSMTC_VERSION=1.0.0
 SET OSMTC_PORT=8888
 SET OSMTC_TILE_SERVER=tile.openstreetmap.org
@@ -42,7 +42,7 @@ SET /P "OSMTC_VERSION=What version of OSM Tile Cache? (Default: %OSMTC_VERSION%)
 SET /P "OSMTC_INSTALL_DIR=Where should OSM Tile Cache be installed? (Default: %OSMTC_INSTALL_DIR%): "
 SET /P "OSMTC_DB_DIR=Where should OSM Tile Cache database space be located? (Default: %OSMTC_DB_DIR%): "
 SET /P "OSMTC_TEMP_DIR=Where should OSM Tile Cache temp space be located? (Default: %OSMTC_TEMP_DIR%): "
-SET /P "OSMTC_TILES_DIR=Where should OSM Tile Cache tile space be located? (Default: %OSMTC_TILES_DIR%): "
+SET /P "OSMTC_TILES_DIR=Where should OSM Tile Cache tile space be located (must end with \)? (Default: %OSMTC_TILES_DIR%): "
 SET /P "OSMTC_PORT=What port should the HTTP service listen on? (Default: %OSMTC_PORT%): "
 SET /P "OSMTC_CONFIG=What operation mode (proxy, cache, proxycache - default: %OSMTC_CONFIG%): "
 SET /P "OSMTC_TILE_SERVER=Tile server address (Default: %OSMTC_TILE_SERVER%): "

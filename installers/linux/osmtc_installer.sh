@@ -39,7 +39,7 @@ if [ "$OSMTC_OS" = "Linux" ]; then
   OSMTC_INSTALL_DIR=~/osmtc
   OSMTC_DB_DIR=~/osmtc/db
   OSMTC_TEMP_DIR=~/osmtc/tmp
-  OSMTC_TILES_DIR=~/osmtc/tiles
+  OSMTC_TILES_DIR=~/osmtc/tiles/
   OSMTC_PORT=8888
   OSMTC_INSTALL_SERVICES=Y
   OSMTC_CONFIG=proxycache
@@ -51,7 +51,7 @@ if [ "$OSMTC_OS" = "Linux" ]; then
       read -e -i $OSMTC_INSTALL_DIR -p "Where should OSM Tile Cache be installed?: " OSMTC_INSTALL_DIR
       read -e -i $OSMTC_DB_DIR -p "Where should OSM Tile Cache database space be located?: " OSMTC_DB_DIR
       read -e -i $OSMTC_TEMP_DIR -p "Where should OSM Tile Cache temp space be located?: " OSMTC_TEMP_DIR
-      read -e -i $OSMTC_TILES_DIR -p "Where should OSM Tile Cache tile space be located?: " OSMTC_TILES_DIR
+      read -e -i $OSMTC_TILES_DIR -p "Where should OSM Tile Cache tile space be located (must end with /)?: " OSMTC_TILES_DIR
       read -e -i $OSMTC_PORT -p "What port should the HTTP service listen on?: " OSMTC_PORT
       read -e -i $OSMTC_CONFIG -p "What operation mode (proxy, cache, proxycache)?: " OSMTC_CONFIG
       read -e -i $OSMTC_TILE_SERVER -p "Tile server address?: " OSMTC_TILE_SERVER
